@@ -6,7 +6,7 @@
     android:background="@color/bg_black">
 
     <!-- ═══════════════════════════════════════════
-         LOCK SCREEN  (visible on launch / resume)
+         LOCK SCREEN
          ═══════════════════════════════════════════ -->
     <LinearLayout
         android:id="@+id/lockScreen"
@@ -16,7 +16,6 @@
         android:gravity="center"
         android:background="@color/bg_black">
 
-        <!-- Large clock -->
         <TextView
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
@@ -27,7 +26,6 @@
             android:fontFamily="monospace"
             android:letterSpacing="0.05" />
 
-        <!-- Date line below clock -->
         <TextView
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
@@ -38,7 +36,6 @@
             android:fontFamily="monospace"
             android:layout_marginTop="8dp" />
 
-        <!-- Terminal prompt — cursor blinks via Handler -->
         <TextView
             android:id="@+id/tvPrompt"
             android:layout_width="wrap_content"
@@ -49,7 +46,6 @@
             android:fontFamily="monospace"
             android:layout_marginTop="48dp" />
 
-        <!-- Unlock hint — dimmed so it doesn't dominate -->
         <TextView
             android:id="@+id/tvSlideUnlock"
             android:layout_width="wrap_content"
@@ -64,8 +60,7 @@
     </LinearLayout>
 
     <!-- ═══════════════════════════════════════════
-         HOME SCREEN  (shown after unlock)
-         Placeholder — expanded in Stages 3–5
+         HOME SCREEN
          ═══════════════════════════════════════════ -->
     <LinearLayout
         android:id="@+id/homeScreen"
@@ -73,28 +68,52 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
+        android:padding="24dp"
         android:background="@color/bg_black"
         android:visibility="gone">
 
+        <!-- App title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textColor="@color/green_primary"
-            android:textSize="36sp"
+            android:textSize="28sp"
             android:fontFamily="monospace"
             android:letterSpacing="0.15" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- System stats card -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/prompt"
-            android:textColor="@color/green_primary"
-            android:textSize="16sp"
-            android:fontFamily="monospace"
-            android:layout_marginTop="20dp" />
+            android:orientation="vertical"
+            android:background="@drawable/bg_status_card"
+            android:padding="16dp"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[ system ]"
+                android:textColor="@color/green_primary"
+                android:textSize="12sp"
+                android:fontFamily="monospace"
+                android:alpha="0.6"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Populated every 3s by StatsProvider via onStats() callback -->
+            <TextView
+                android:id="@+id/tvStats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="loading..."
+                android:textColor="@color/green_primary"
+                android:textSize="13sp"
+                android:fontFamily="monospace"
+                android:lineSpacingMultiplier="1.4" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
 </FrameLayout>
-
