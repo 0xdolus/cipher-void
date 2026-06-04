@@ -1,30 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_black"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:background="@color/bg_black">
 
-    <!-- App title -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textColor="@color/green_primary"
-        android:textSize="36sp"
-        android:fontFamily="monospace"
-        android:letterSpacing="0.15" />
+    <!-- ═══════════════════════════════════════════
+         LOCK SCREEN  (visible on launch / resume)
+         ═══════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/lockScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/bg_black">
 
-    <!-- Terminal prompt — visual placeholder until Stage 2 lock screen -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/prompt"
-        android:textColor="@color/green_primary"
-        android:textSize="16sp"
-        android:fontFamily="monospace"
-        android:layout_marginTop="20dp" />
+        <!-- Large clock -->
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:textColor="@color/green_primary"
+            android:textSize="56sp"
+            android:fontFamily="monospace"
+            android:letterSpacing="0.05" />
 
-</LinearLayout>
+        <!-- Date line below clock -->
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mon 01 jan 2026"
+            android:textColor="@color/green_primary"
+            android:textSize="18sp"
+            android:fontFamily="monospace"
+            android:layout_marginTop="8dp" />
+
+        <!-- Terminal prompt — cursor blinks via Handler -->
+        <TextView
+            android:id="@+id/tvPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="root@android:~$ _"
+            android:textColor="@color/green_primary"
+            android:textSize="16sp"
+            android:fontFamily="monospace"
+            android:layout_marginTop="48dp" />
+
+        <!-- Unlock hint — dimmed so it doesn't dominate -->
+        <TextView
+            android:id="@+id/tvSlideUnlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/slide_to_unlock"
+            android:textColor="@color/green_primary"
+            android:textSize="13sp"
+            android:fontFamily="monospace"
+            android:layout_marginTop="96dp"
+            android:alpha="0.45" />
+
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════════════════
+         HOME SCREEN  (shown after unlock)
+         Placeholder — expanded in Stages 3–5
+         ═══════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/homeScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/bg_black"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/green_primary"
+            android:textSize="36sp"
+            android:fontFamily="monospace"
+            android:letterSpacing="0.15" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt"
+            android:textColor="@color/green_primary"
+            android:textSize="16sp"
+            android:fontFamily="monospace"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+
+</FrameLayout>
+

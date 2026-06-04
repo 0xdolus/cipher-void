@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">cipher-void</string>
     <string name="prompt">root@android:~$</string>
+    <string name="slide_to_unlock">&gt;&gt;&gt; swipe right to unlock</string>
 </resources>
+
