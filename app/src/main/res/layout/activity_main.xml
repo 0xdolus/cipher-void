@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_black"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <!-- App title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="@color/green_primary"
+        android:textSize="36sp"
+        android:fontFamily="monospace"
+        android:letterSpacing="0.15" />
+
+    <!-- Terminal prompt — visual placeholder until Stage 2 lock screen -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/prompt"
+        android:textColor="@color/green_primary"
+        android:textSize="16sp"
+        android:fontFamily="monospace"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>
