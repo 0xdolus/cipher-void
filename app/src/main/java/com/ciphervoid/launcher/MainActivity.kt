@@ -2,10 +2,7 @@ package com.ciphervoid.launcher
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,77 +11,32 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class MainActivity : AppCompatActivity(), StatsProvider.Callback {
 
     companion object {
-        private const val CLOCK_INTERVAL_MS  = 1000L
-        private const val CURSOR_INTERVAL_MS = 500L
-        private const val SWIPE_THRESHOLD_PX = 200
-        private const val GRID_COLUMNS       = 3
-        private const val DOCK_SIZE          = 4
+        private const val GRID_COLUMNS   = 3
+        private const val DOCK_SIZE      = 4
+        private const val HOME_APP_LIMIT = 9   // first 9 apps on home — full list lives in drawer
     }
 
-    // Lock screen views
-    private lateinit var lockScreen: LinearLayout
-    private lateinit var tvTime:     TextView
-    private lateinit var tvDate:     TextView
-    private lateinit var tvPrompt:   TextView
-
-    // Home screen views
-    private lateinit var homeScreen:    LinearLayout
     private lateinit var tvStats:       TextView
     private lateinit var rvApps:        RecyclerView
     private lateinit var searchTrigger: TextView
 
-    // Dock
     private lateinit var dockIcons: List<ImageView>
     private lateinit var dockNames: List<TextView>
 
-    private val handler       = Handler(Looper.getMainLooper())
-    private var cursorVisible = true
     private lateinit var statsProvider: StatsProvider
-
-    private val timeFmt = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-    private val dateFmt = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-
-    private val clockRunnable = object : Runnable {
-        override fun run() {
-            val now = Date()
-            tvTime.text = timeFmt.format(now)
-            tvDate.text = dateFmt.format(now).lowercase()
-            handler.postDelayed(this, CLOCK_INTERVAL_MS)
-        }
-    }
-
-    private val cursorRunnable = object : Runnable {
-        override fun run() {
-            cursorVisible = !cursorVisible
-            tvPrompt.text = if (cursorVisible) "root@android:~$ _" else "root@android:~$  "
-            handler.postDelayed(this, CURSOR_INTERVAL_MS)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Lock screen
-        lockScreen = findViewById(R.id.lockScreen)
-        tvTime     = findViewById(R.id.tvTime)
-        tvDate     = findViewById(R.id.tvDate)
-        tvPrompt   = findViewById(R.id.tvPrompt)
-
-        // Home screen
-        homeScreen    = findViewById(R.id.homeScreen)
         tvStats       = findViewById(R.id.tvStats)
         rvApps        = findViewById(R.id.rvApps)
         searchTrigger = findViewById(R.id.searchTrigger)
 
-        // Dock
         dockIcons = listOf(
             findViewById(R.id.dockIcon0), findViewById(R.id.dockIcon1),
             findViewById(R.id.dockIcon2), findViewById(R.id.dockIcon3)
@@ -98,36 +50,32 @@ class MainActivity : AppCompatActivity(), StatsProvider.Callback {
         rvApps.layoutManager = GridLayoutManager(this, GRID_COLUMNS)
 
         statsProvider = StatsProvider(this)
-
-        setupSlideToUnlock()
-        // Tap the search bar to open the full app drawer
         searchTrigger.setOnClickListener { openDrawer() }
+
         loadApps()
     }
 
     override fun onResume() {
         super.onResume()
-        showLockScreen()
-        handler.post(clockRunnable)
-        handler.post(cursorRunnable)
         statsProvider.start(this)
     }
 
     override fun onPause() {
         super.onPause()
-        handler.removeCallbacks(clockRunnable)
-        handler.removeCallbacks(cursorRunnable)
         statsProvider.stop()
     }
 
+    // StatsProvider.Callback
     override fun onStats(s: StatsProvider.StatsSnapshot) {
-        tvStats.text =
-            "os       android\n" +
-            "kernel   ${s.kernel}\n" +
-            "uptime   ${s.uptime}\n" +
-            "battery  ${s.battery}\n" +
-            "ram      ${s.ram}\n" +
-            "storage  ${s.storage}"
+        // Skip rows that the device blocks via SELinux — don't show "n/a" clutter
+        val lines = mutableListOf<String>()
+        lines.add("os       android")
+        if (s.kernel  != "n/a") lines.add("kernel   ${s.kernel}")
+        if (s.uptime  != "n/a") lines.add("uptime   ${s.uptime}")
+        lines.add("battery  ${s.battery}")
+        lines.add("ram      ${s.ram}")
+        lines.add("storage  ${s.storage}")
+        tvStats.text = lines.joinToString("\n")
     }
 
     private fun openDrawer() {
@@ -138,7 +86,8 @@ class MainActivity : AppCompatActivity(), StatsProvider.Callback {
         Thread {
             val apps = AppLoader(this).load()
             runOnUiThread {
-                rvApps.adapter = AppAdapter(apps)
+                // Home screen shows only the first HOME_APP_LIMIT apps — full list is in the drawer
+                rvApps.adapter = AppAdapter(apps.take(HOME_APP_LIMIT))
                 setupDock(apps)
             }
         }.start()
@@ -162,30 +111,6 @@ class MainActivity : AppCompatActivity(), StatsProvider.Callback {
     private fun launchApp(packageName: String) {
         val intent = packageManager.getLaunchIntentForPackage(packageName)
         if (intent != null) startActivity(intent)
-    }
-
-    private fun showLockScreen() {
-        lockScreen.visibility = View.VISIBLE
-        homeScreen.visibility = View.GONE
-    }
-
-    private fun showHomeScreen() {
-        lockScreen.visibility = View.GONE
-        homeScreen.visibility = View.VISIBLE
-    }
-
-    private fun setupSlideToUnlock() {
-        var touchStartX = 0f
-        lockScreen.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> { touchStartX = event.x; true }
-                MotionEvent.ACTION_UP   -> {
-                    if (event.x - touchStartX > SWIPE_THRESHOLD_PX) showHomeScreen()
-                    true
-                }
-                else -> false
-            }
-        }
     }
 
     // ─── Inner adapter ────────────────────────────────────────────────────────

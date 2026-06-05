@@ -16,14 +16,13 @@ import androidx.recyclerview.widget.RecyclerView
 class AppDrawerActivity : AppCompatActivity() {
 
     companion object {
-        private const val GRID_COLUMNS = 3
+        private const val GRID_COLUMNS = 4   // wider grid — more apps visible without scrolling
     }
 
     private lateinit var etSearch: EditText
     private lateinit var rvDrawer: RecyclerView
     private lateinit var adapter:  DrawerAdapter
 
-    // Full unfiltered list — kept so search can reset to all apps when query is cleared
     private var allApps: List<AppInfo> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,8 +64,6 @@ class AppDrawerActivity : AppCompatActivity() {
         val intent = packageManager.getLaunchIntentForPackage(packageName)
         if (intent != null) startActivity(intent)
     }
-
-    // ─── Inner adapter ────────────────────────────────────────────────────────
 
     private inner class DrawerAdapter(private var apps: List<AppInfo>) :
         RecyclerView.Adapter<DrawerAdapter.ViewHolder>() {

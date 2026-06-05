@@ -1,227 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/bg_black">
 
-    <!-- ═══════════════════════════════════════════
-         LOCK SCREEN
-         ═══════════════════════════════════════════ -->
-    <LinearLayout
-        android:id="@+id/lockScreen"
+    <!-- Scrollable area: fish header + stats + app grid -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="@color/bg_black">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:00:00"
-            android:textColor="@color/green_primary"
-            android:textSize="56sp"
-            android:fontFamily="monospace"
-            android:letterSpacing="0.05" />
-
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="mon 01 jan 2026"
-            android:textColor="@color/green_primary"
-            android:textSize="18sp"
-            android:fontFamily="monospace"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/tvPrompt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="root@android:~$ _"
-            android:textColor="@color/green_primary"
-            android:textSize="16sp"
-            android:fontFamily="monospace"
-            android:layout_marginTop="48dp" />
-
-        <TextView
-            android:id="@+id/tvSlideUnlock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/slide_to_unlock"
-            android:textColor="@color/green_primary"
-            android:textSize="13sp"
-            android:fontFamily="monospace"
-            android:layout_marginTop="96dp"
-            android:alpha="0.45" />
-
-    </LinearLayout>
-
-    <!-- ═══════════════════════════════════════════
-         HOME SCREEN
-         ═══════════════════════════════════════════ -->
-    <LinearLayout
-        android:id="@+id/homeScreen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/bg_black"
-        android:visibility="gone">
-
-        <!-- Scrollable area: title + stats + app grid -->
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="16dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <!-- Fish-shell style prompt header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r-[root@android]-[~]"
+                android:textColor="@color/green_primary"
+                android:textSize="13sp"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Stats card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/bg_status_card"
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_name"
-                    android:textColor="@color/green_primary"
-                    android:textSize="24sp"
-                    android:fontFamily="monospace"
-                    android:letterSpacing="0.15" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/bg_status_card"
-                    android:padding="16dp"
-                    android:layout_marginTop="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="[ system ]"
-                        android:textColor="@color/green_primary"
-                        android:textSize="12sp"
-                        android:fontFamily="monospace"
-                        android:alpha="0.6"
-                        android:layout_marginBottom="10dp" />
-
-                    <TextView
-                        android:id="@+id/tvStats"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="loading..."
-                        android:textColor="@color/green_primary"
-                        android:textSize="13sp"
-                        android:fontFamily="monospace"
-                        android:lineSpacingMultiplier="1.4" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="[ apps ]"
+                    android:text="[ system ]"
                     android:textColor="@color/green_primary"
                     android:textSize="12sp"
                     android:fontFamily="monospace"
                     android:alpha="0.6"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="10dp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvApps"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tvStats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="loading..."
+                    android:textColor="@color/green_primary"
+                    android:textSize="13sp"
+                    android:fontFamily="monospace"
+                    android:lineSpacingMultiplier="1.4" />
 
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+            <!-- Apps section header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[ apps ]"
+                android:textColor="@color/green_primary"
+                android:textSize="12sp"
+                android:fontFamily="monospace"
+                android:alpha="0.6"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp" />
 
-        <!-- Search / drawer trigger — tap to open AppDrawerActivity -->
-        <TextView
-            android:id="@+id/searchTrigger"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/search_trigger"
-            android:textColor="@color/green_primary"
-            android:textSize="13sp"
-            android:fontFamily="monospace"
-            android:gravity="center"
-            android:background="@drawable/bg_search_bar"
-            android:padding="12dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="4dp"
-            android:alpha="0.7" />
+            <!-- Home grid — capped at 9, full list in drawer -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvApps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- Dock — 4 equal slots, pinned at bottom -->
-        <LinearLayout
-            android:id="@+id/dock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/bg_dock"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+        </LinearLayout>
 
-            <LinearLayout android:id="@+id/dockSlot0"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-                <ImageView android:id="@+id/dockIcon0"
-                    android:layout_width="40dp" android:layout_height="40dp"
-                    android:background="@drawable/bg_app_icon" android:padding="5dp" android:scaleType="fitCenter" />
-                <TextView android:id="@+id/dockName0"
-                    android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:text="" android:textColor="@color/green_primary" android:textSize="9sp"
-                    android:fontFamily="monospace" android:gravity="center"
-                    android:maxLines="1" android:ellipsize="end" android:layout_marginTop="3dp" />
-            </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-            <LinearLayout android:id="@+id/dockSlot1"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-                <ImageView android:id="@+id/dockIcon1"
-                    android:layout_width="40dp" android:layout_height="40dp"
-                    android:background="@drawable/bg_app_icon" android:padding="5dp" android:scaleType="fitCenter" />
-                <TextView android:id="@+id/dockName1"
-                    android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:text="" android:textColor="@color/green_primary" android:textSize="9sp"
-                    android:fontFamily="monospace" android:gravity="center"
-                    android:maxLines="1" android:ellipsize="end" android:layout_marginTop="3dp" />
-            </LinearLayout>
+    <!-- Search / drawer trigger -->
+    <TextView
+        android:id="@+id/searchTrigger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_trigger"
+        android:textColor="@color/green_primary"
+        android:textSize="13sp"
+        android:fontFamily="monospace"
+        android:gravity="center"
+        android:background="@drawable/bg_search_bar"
+        android:padding="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        android:alpha="0.7" />
 
-            <LinearLayout android:id="@+id/dockSlot2"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-                <ImageView android:id="@+id/dockIcon2"
-                    android:layout_width="40dp" android:layout_height="40dp"
-                    android:background="@drawable/bg_app_icon" android:padding="5dp" android:scaleType="fitCenter" />
-                <TextView android:id="@+id/dockName2"
-                    android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:text="" android:textColor="@color/green_primary" android:textSize="9sp"
-                    android:fontFamily="monospace" android:gravity="center"
-                    android:maxLines="1" android:ellipsize="end" android:layout_marginTop="3dp" />
-            </LinearLayout>
+    <!-- Dock — 4 equal slots -->
+    <LinearLayout
+        android:id="@+id/dock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_dock"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
-            <LinearLayout android:id="@+id/dockSlot3"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-                <ImageView android:id="@+id/dockIcon3"
-                    android:layout_width="40dp" android:layout_height="40dp"
-                    android:background="@drawable/bg_app_icon" android:padding="5dp" android:scaleType="fitCenter" />
-                <TextView android:id="@+id/dockName3"
-                    android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:text="" android:textColor="@color/green_primary" android:textSize="9sp"
-                    android:fontFamily="monospace" android:gravity="center"
-                    android:maxLines="1" android:ellipsize="end" android:layout_marginTop="3dp" />
-            </LinearLayout>
+        <LinearLayout android:id="@+id/dockSlot0"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+            <ImageView android:id="@+id/dockIcon0"
+                android:layout_width="40dp" android:layout_height="40dp"
+                android:background="@drawable/bg_app_icon" android:padding="5dp" android:scaleType="fitCenter" />
+            <TextView android:id="@+id/dockName0"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="" android:textColor="@color/green_primary" android:textSize="9sp"
+                android:fontFamily="monospace" android:gravity="center"
+                android:maxLines="1" android:ellipsize="end" android:layout_marginTop="3dp" />
+        </LinearLayout>
 
+        <LinearLayout android:id="@+id/dockSlot1"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+            <ImageView android:id="@+id/dockIcon1"
+                android:layout_width="40dp" android:layout_height="40dp"
+                android:background="@drawable/bg_app_icon" android:padding="5dp" android:scaleType="fitCenter" />
+            <TextView android:id="@+id/dockName1"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="" android:textColor="@color/green_primary" android:textSize="9sp"
+                android:fontFamily="monospace" android:gravity="center"
+                android:maxLines="1" android:ellipsize="end" android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/dockSlot2"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+            <ImageView android:id="@+id/dockIcon2"
+                android:layout_width="40dp" android:layout_height="40dp"
+                android:background="@drawable/bg_app_icon" android:padding="5dp" android:scaleType="fitCenter" />
+            <TextView android:id="@+id/dockName2"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="" android:textColor="@color/green_primary" android:textSize="9sp"
+                android:fontFamily="monospace" android:gravity="center"
+                android:maxLines="1" android:ellipsize="end" android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/dockSlot3"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+            <ImageView android:id="@+id/dockIcon3"
+                android:layout_width="40dp" android:layout_height="40dp"
+                android:background="@drawable/bg_app_icon" android:padding="5dp" android:scaleType="fitCenter" />
+            <TextView android:id="@+id/dockName3"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="" android:textColor="@color/green_primary" android:textSize="9sp"
+                android:fontFamily="monospace" android:gravity="center"
+                android:maxLines="1" android:ellipsize="end" android:layout_marginTop="3dp" />
         </LinearLayout>
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>
