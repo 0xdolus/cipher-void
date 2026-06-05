@@ -1,5 +1,6 @@
 package com.ciphervoid.launcher
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -27,22 +28,23 @@ class MainActivity : AppCompatActivity(), StatsProvider.Callback {
         private const val DOCK_SIZE          = 4
     }
 
-    // Views — lock screen
+    // Lock screen views
     private lateinit var lockScreen: LinearLayout
     private lateinit var tvTime:     TextView
     private lateinit var tvDate:     TextView
     private lateinit var tvPrompt:   TextView
 
-    // Views — home screen
-    private lateinit var homeScreen: LinearLayout
-    private lateinit var tvStats:    TextView
-    private lateinit var rvApps:     RecyclerView
+    // Home screen views
+    private lateinit var homeScreen:    LinearLayout
+    private lateinit var tvStats:       TextView
+    private lateinit var rvApps:        RecyclerView
+    private lateinit var searchTrigger: TextView
 
-    // Dock icon + label pairs, indexed 0–3
+    // Dock
     private lateinit var dockIcons: List<ImageView>
     private lateinit var dockNames: List<TextView>
 
-    private val handler      = Handler(Looper.getMainLooper())
+    private val handler       = Handler(Looper.getMainLooper())
     private var cursorVisible = true
     private lateinit var statsProvider: StatsProvider
 
@@ -70,18 +72,19 @@ class MainActivity : AppCompatActivity(), StatsProvider.Callback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Lock screen views
+        // Lock screen
         lockScreen = findViewById(R.id.lockScreen)
         tvTime     = findViewById(R.id.tvTime)
         tvDate     = findViewById(R.id.tvDate)
         tvPrompt   = findViewById(R.id.tvPrompt)
 
-        // Home screen views
-        homeScreen = findViewById(R.id.homeScreen)
-        tvStats    = findViewById(R.id.tvStats)
-        rvApps     = findViewById(R.id.rvApps)
+        // Home screen
+        homeScreen    = findViewById(R.id.homeScreen)
+        tvStats       = findViewById(R.id.tvStats)
+        rvApps        = findViewById(R.id.rvApps)
+        searchTrigger = findViewById(R.id.searchTrigger)
 
-        // Dock — collect into indexed lists so the loop in setupDock() stays clean
+        // Dock
         dockIcons = listOf(
             findViewById(R.id.dockIcon0), findViewById(R.id.dockIcon1),
             findViewById(R.id.dockIcon2), findViewById(R.id.dockIcon3)
@@ -91,13 +94,14 @@ class MainActivity : AppCompatActivity(), StatsProvider.Callback {
             findViewById(R.id.dockName2), findViewById(R.id.dockName3)
         )
 
-        // RecyclerView must not try to scroll inside the NestedScrollView
         rvApps.isNestedScrollingEnabled = false
         rvApps.layoutManager = GridLayoutManager(this, GRID_COLUMNS)
 
         statsProvider = StatsProvider(this)
 
         setupSlideToUnlock()
+        // Tap the search bar to open the full app drawer
+        searchTrigger.setOnClickListener { openDrawer() }
         loadApps()
     }
 
@@ -126,8 +130,11 @@ class MainActivity : AppCompatActivity(), StatsProvider.Callback {
             "storage  ${s.storage}"
     }
 
+    private fun openDrawer() {
+        startActivity(Intent(this, AppDrawerActivity::class.java))
+    }
+
     private fun loadApps() {
-        // PackageManager icon loading can be slow on budget hardware — keep it off the UI thread
         Thread {
             val apps = AppLoader(this).load()
             runOnUiThread {
@@ -138,18 +145,17 @@ class MainActivity : AppCompatActivity(), StatsProvider.Callback {
     }
 
     private fun setupDock(apps: List<AppInfo>) {
-        // Take the first DOCK_SIZE apps alphabetically — user can reorder in a later stage
-        val dockApps = apps.take(DOCK_SIZE)
+        val dockApps  = apps.take(DOCK_SIZE)
+        val dockSlots = listOf(
+            findViewById<LinearLayout>(R.id.dockSlot0),
+            findViewById<LinearLayout>(R.id.dockSlot1),
+            findViewById<LinearLayout>(R.id.dockSlot2),
+            findViewById<LinearLayout>(R.id.dockSlot3)
+        )
         dockApps.forEachIndexed { i, app ->
             dockIcons[i].setImageDrawable(app.icon)
             dockNames[i].text = app.name
-            // Tap any dock slot to launch that app
-            listOf(
-                findViewById<LinearLayout>(R.id.dockSlot0),
-                findViewById<LinearLayout>(R.id.dockSlot1),
-                findViewById<LinearLayout>(R.id.dockSlot2),
-                findViewById<LinearLayout>(R.id.dockSlot3)
-            )[i].setOnClickListener { launchApp(app.packageName) }
+            dockSlots[i].setOnClickListener { launchApp(app.packageName) }
         }
     }
 

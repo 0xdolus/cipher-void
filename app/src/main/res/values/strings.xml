@@ -3,5 +3,6 @@
     <string name="app_name">cipher-void</string>
     <string name="prompt">root@android:~$</string>
     <string name="slide_to_unlock">&gt;&gt;&gt; swipe right to unlock</string>
+    <string name="search_hint">search apps...</string>
+    <string name="search_trigger">[ search / all apps ]</string>
 </resources>
-
