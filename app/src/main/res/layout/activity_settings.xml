@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_black">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[ settings ]"
+        android:textColor="@color/green_primary"
+        android:textSize="18sp"
+        android:fontFamily="monospace"
+        android:padding="16dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Dock section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[ dock ]"
+                android:textColor="@color/green_primary"
+                android:textSize="12sp"
+                android:fontFamily="monospace"
+                android:alpha="0.6"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Dock slots populated dynamically -->
+            <LinearLayout
+                android:id="@+id/dockContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_status_card"
+                android:padding="8dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Home grid section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[ home grid ]"
+                android:textColor="@color/green_primary"
+                android:textSize="12sp"
+                android:fontFamily="monospace"
+                android:alpha="0.6"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Home slots populated dynamically -->
+            <LinearLayout
+                android:id="@+id/homeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_status_card"
+                android:padding="8dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -19,9 +19,9 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".AppDrawerActivity"
-            android:exported="false" />
+        <activity android:name=".AppDrawerActivity" android:exported="false" />
+        <activity android:name=".SettingsActivity"  android:exported="false" />
+        <activity android:name=".PinAppActivity"    android:exported="false" />
 
     </application>
 
