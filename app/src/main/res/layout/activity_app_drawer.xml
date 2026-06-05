@@ -15,7 +15,7 @@
         android:background="@drawable/bg_search_bar"
         android:padding="12dp"
         android:hint="@string/search_hint"
-        android:hintTextColor="#4D00FF41"
+        android:textColorHint="#4D00FF41"
         android:textColor="@color/green_primary"
         android:textCursorDrawable="@null"
         android:textSize="14sp"
