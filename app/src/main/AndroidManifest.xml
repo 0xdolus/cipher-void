@@ -5,7 +5,7 @@
 
     <application
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:theme="@style/AppTheme"
         android:allowBackup="false">
 
         <activity
@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
 
-        <!-- App drawer — standard activity, no special intent filter needed -->
         <activity
             android:name=".AppDrawerActivity"
             android:exported="false" />
